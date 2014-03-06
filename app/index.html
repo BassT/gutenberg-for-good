@@ -8,7 +8,7 @@
 				The navigation
 				================================= -->
 
-		<nav class="navbar navbar-default" ng-controller="NavCtrl">
+		<nav class="navbar navbar-default">
 			<div class="navbar-header">
 	      <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
 	        <span class="sr-only">Toggle navigation</span>
@@ -34,7 +34,7 @@
 				The view
 				================================= -->
 
-		<div class="container" ng-view>
+		<div class="container" ng-view ng-controller="ViewCtrl">
 			
 		</div>
 

@@ -1,9 +1,18 @@
 'use strict';
 
 /* Services */
+angular.module('gutenberg.services', [])
+	.value("Alphabet", ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',"'",' ',',','.',';',':','?','!','(',')','-',"@",'"','#'])
+	.factory("Typing", function() { 
+		
+		var Typing = {};
 
+		Typing.start = false;
 
-// Demonstrate how to register services
-// In this case it is a simple value service.
-angular.module('gutenberg.services', []).
-  value('version', '0.1');
+		Typing.set = function(value) {
+			this.start = value;
+		};
+
+		return Typing;
+
+	});

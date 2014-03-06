@@ -15,7 +15,7 @@ angular.module('gutenberg', [
 
 			})
 			.when("/straightforward", {
-
+				templateUrl: "partials/straightforward.html"
 			})
 			.when("/first-order", {
 
@@ -27,6 +27,6 @@ angular.module('gutenberg', [
 
 			})
 			.otherwise({
-				redirectTo: "/"
+				redirectTo: "/home"
 			});
 	});
