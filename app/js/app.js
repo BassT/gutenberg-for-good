@@ -12,13 +12,13 @@ angular.module('gutenberg', [
 	.config( function($routeProvider) {
 		$routeProvider
 			.when("/home", {
-
+				templateUrl: "partials/home.html"
 			})
 			.when("/straightforward", {
 				templateUrl: "partials/straightforward.html"
 			})
 			.when("/first-order", {
-
+				templateUrl: "partials/first-order.html"
 			})
 			.when("/second-order", {
 

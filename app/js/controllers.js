@@ -14,6 +14,10 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
   		$scope.$broadcast("typingChangedBroadcast"); // broadcast down that someone clicked a typing control button 
   	});
 
+  	$scope.$on("TypedCharacterEmit", function() {
+  		$scope.$broadcast("TypedCharacterBroadcast");
+  	})
+
   }])
 
 	/* Typing controller
@@ -34,11 +38,13 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
   /* Straightforward monkey controller
   		- Generates random characters from our defined alphabet
   		- A stupid controller...eh... monkey */
-  .controller('StraightforwardMonkey', ['$scope', '$interval', 'Alphabet', 'Typing', function($scope, $interval, Alphabet, Typing) {
+  .controller('StraightforwardMonkey', ['$scope', '$interval', 'Alphabet', 'Typing', 'myFunctions', function($scope, $interval, Alphabet, Typing, myFunctions) {
   	
   	$scope.text = ""; //initialize emtpy text
 
   	var timer = {};
+  	var word = "";
+  	var character = "";
 
 		$scope.$on("typingChangedBroadcast", function() { // receive event that someone clicked a typing control button
 			console.log("Received typingChangedBroadcast");
@@ -47,8 +53,11 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 			if(Typing.start){ // monkey, work!
 				if(!angular.isDefined(timer)) {
 					timer = $interval( function() {
-						var rand = Math.floor(Math.random() * Alphabet.length);
-						$scope.text += Alphabet[rand];
+						var rand = Math.floor(Math.random() * Alphabet.length); // get index of next character randomly
+						character = Alphabet[rand];
+						$scope.text += character; // add actual next character to text
+						myFunctions.checkForWord(character, "straightforward");
+						$scope.$emit("TypedCharacterEmit");
 						}, Typing.speed);	
 				}
 			} else { // monkey, stop!
@@ -59,4 +68,39 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 			}
 		});
 
-  }]);
+  }])
+
+
+	.controller("EvaluationCtrl", ["$scope", "Monkeys", function($scope, Monkeys) {
+
+		$scope.monkeys = Monkeys.monkeys;
+
+		$scope.$watch("Monkeys.monkeys[0].fakeWords", function(newVal, oldVal, scope) {
+			if(newVal !== undefined){
+				$scope.monkeys[0].fakeWords = newVal;
+				// $scope.monkeys[0].ratio = ($scope.monkeys[0].actualWords) / ($scope.monkeys[0].actualWords + $scope.monkeys[0].fakeWords);
+			}
+		});
+
+		$scope.$watch("Monkeys.monkeys[0].actualWords", function(newVal, oldVal, scope) {
+			if(newVal !== undefined){
+				$scope.monkeys[0].actualWords = newVal;
+				// $scope.monkeys[0].ratio = ($scope.monkeys[0].actualWords) / ($scope.monkeys[0].actualWords + $scope.monkeys[0].fakeWords);
+			}
+		});
+
+		$scope.$watch("Monkeys.monkeys[1].fakeWords", function(newVal, oldVal, scope) {
+			if(newVal !== undefined){
+				$scope.monkeys[1].fakeWords = newVal;
+				// $scope.monkeys[1].ratio = ($scope.monkeys[1].actualWords) / ($scope.monkeys[1].actualWords + $scope.monkeys[1].fakeWords);
+			}
+		});
+
+		$scope.$watch("Monkeys.monkeys[1].actualWords", function(newVal, oldVal, scope) {
+			if(newVal !== undefined){
+				$scope.monkeys[1].actualWords = newVal;
+				// $scope.monkeys[1].ratio = ($scope.monkeys[1].actualWords) / ($scope.monkeys[1].actualWords + $scope.monkeys[1].fakeWords);
+			}
+		});
+
+	}]);
