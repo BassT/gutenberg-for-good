@@ -21,9 +21,11 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 			- Can we use this for every monkey?	*/
   .controller('TypingCtrl', ['$scope', 'Typing', function($scope, Typing) {
 
+  	$scope.typing = { stop: true, start: false };
+
   	$scope.clicked = function(value) {
   		console.log("Emitted typingChangedEmit");
-  		Typing.set(value);
+  		Typing.setStart(value);
   		$scope.$emit("typingChangedEmit");  // emit up that someone clicked a typing control button
   	}; 
 
@@ -32,7 +34,7 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
   /* Straightforward monkey controller
   		- Generates random characters from our defined alphabet
   		- A stupid controller...eh... monkey */
-  .controller('StraightforwardMonkey', ['$scope', 'Alphabet', 'Typing', function($scope, Alphabet, Typing) {
+  .controller('StraightforwardMonkey', ['$scope', '$interval', 'Alphabet', 'Typing', function($scope, $interval, Alphabet, Typing) {
   	
   	$scope.text = ""; //initialize emtpy text
 
@@ -41,13 +43,19 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 		$scope.$on("typingChangedBroadcast", function() { // receive event that someone clicked a typing control button
 			console.log("Received typingChangedBroadcast");
 			console.log(Typing);
+
 			if(Typing.start){ // monkey, work!
-				timer = window.setInterval( function() {
-					var rand = Math.floor(Math.random() * Alphabet.length);
-					$scope.text += Alphabet[rand];
-					}, 100);
-			} else {
-				clearInterval(timer);
+				if(!angular.isDefined(timer)) {
+					timer = $interval( function() {
+						var rand = Math.floor(Math.random() * Alphabet.length);
+						$scope.text += Alphabet[rand];
+						}, Typing.speed);	
+				}
+			} else { // monkey, stop!
+				if(angular.isDefined(timer)) {
+					$interval.cancel(timer);
+					timer = undefined;
+				}
 			}
 		});
 
