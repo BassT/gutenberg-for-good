@@ -1,0 +1,40 @@
+<h1>Straightforward monkey</h1>
+<div class="row">
+	<div class="col-sm-6">
+		<h2>Description</h2>
+		<p>This is a straighforward monkey. He randomly types characters. Stupid.</p>
+	</div>
+	<div class="col-sm-6">
+		<h2>Controls</h2>
+		<div class="btn-group" ng-controller="TypingCtrl">
+			<button type="button" class="btn" ng-model="typing" ng-click="clicked(true)" btn-radio="'start'"><span class="glyphicon glyphicon-play"></span> Start typing</button>
+			<button type="button" class="btn active" ng-model="typing" ng-click="clicked(false)" btn-radio="'stop'"><span class="glyphicon glyphicon-stop"></span> Stop typing</button>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-6">
+		<h2>Text typed by a straighforward monkey</h2>
+		<p class="monkey-text" ng-controller="StraightforwardMonkey">
+			{{ text }}
+		</p>
+	</div>
+	<div class="col-sm-6">
+		<h2>Evaluation</h2>
+		<p class="bg-info">We're considering every occurence of " ", "?", "!", ",", ".", """ or "'" as a word delimiter.</p>
+		<table class="table" ng-controller="EvaluationCtrl">
+			<tr>
+				<th>Monkey type</th>
+				<th>Actual english words</th>
+				<th>Fake words</th>
+				<th>Ratio</th>
+			</tr>
+			<tr ng-repeat="monkey in monkeys">
+				<td>{{ monkey.name }}</td>
+				<td>{{ monkey.actualWords }}</td>
+				<td>{{ monkey.fakeWords }}</td>
+				<td>{{ ((monkey.actualWords) / (monkey.actualWords + monkey.fakeWords)) * 100 | number:2 }} %</td>
+			</tr>
+		</table>
+	</div>
+</div>

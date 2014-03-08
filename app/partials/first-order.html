@@ -1,0 +1,52 @@
+<h1>First-order monkey</h1>
+<div class="row">
+	<div class="col-sm-6">
+		<h2>Description</h2>
+		<p>
+			This is a first-order monkey. You can feed the monkey a text and she or he will type characters according to their occurence in the text you gave her or him.
+		</p>
+		<ol>
+			<li>First search and select a text from Project Gutenberg</li>
+			<li>Analyze the text</li>
+			<li>Let the monkey text</li>
+		</ol>
+		<p>
+			During the text analysis the monkey records for every <i>duo</i> of characters its frequency and stores it in a two-dimensional array. When asked to type, he slices the array to those <i>duos</i>, which start with the previously typed character. Using this slice he computes the sum of the frequencies of all elements in the array, denoted by <i>totalFreq</i>, and generates a random number within the interval [0:<i>totalFreq</i>]. Then he successively adds the frequencies of the elements of the slice up until this sum exceeds <i>totalFreq</i> and types the characters, whose frequency he added last.
+		</p>
+	</div>
+	<div class="col-sm-6">
+		<h2>Controls</h2>
+		<p>Search for an author or title on Project Gutenberg:</p>
+		<p><input type="text" gutenberg-search/> <button type="button" class="btn" ng-click="analyzeText(1)" ng-controller="TextAnalyzerCtrl">Analyze text</button></p>
+		<div class="btn-group" ng-controller="TypingCtrl">
+			<button type="button" class="btn" ng-model="typing" ng-click="clicked(true)" btn-radio="'start'"><span class="glyphicon glyphicon-play"></span> Start typing</button>
+			<button type="button" class="btn active" ng-model="typing" ng-click="clicked(false)" btn-radio="'stop'"><span class="glyphicon glyphicon-stop"></span> Stop typing</button>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-6">
+		<h2>Text typed by a first-order monkey</h2>
+		<p class="monkey-text" ng-controller="First-orderMonkey">
+			{{ text }}
+		</p>
+	</div>
+	<div class="col-sm-6">
+		<h2>Evaluation</h2>
+		<p class="bg-info">We're considering every occurence of " ", "?", "!", ",", ".", """ or "'" as a word delimiter.</p>
+		<table class="table" ng-controller="EvaluationCtrl">
+			<tr>
+				<th>Monkey type</th>
+				<th>Actual english words</th>
+				<th>Fake words</th>
+				<th>Ratio</th>
+			</tr>
+			<tr ng-repeat="monkey in monkeys">
+				<td>{{ monkey.name }}</td>
+				<td>{{ monkey.actualWords }}</td>
+				<td>{{ monkey.fakeWords }}</td>
+				<td>{{ ((monkey.actualWords) / (monkey.actualWords + monkey.fakeWords)) * 100 | number:2 }} %</td>
+			</tr>
+		</table>
+	</div>
+</div>
