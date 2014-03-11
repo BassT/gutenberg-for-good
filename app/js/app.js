@@ -21,10 +21,10 @@ angular.module('gutenberg', [
 				templateUrl: "partials/first-order.html"
 			})
 			.when("/second-order", {
-
+				templateUrl: "partials/second-order.html"
 			})
 			.when("/third-order", {
-
+				templateUrl: "partials/third-order.html"
 			})
 			.otherwise({
 				redirectTo: "/home"

@@ -34,7 +34,7 @@ angular.module('gutenberg.services', [])
 		var Typing = {};
 
 		Typing.start = false;
-		Typing.speed = 50;
+		Typing.speed = 10;
 
 		Typing.setStart = function(value) {
 			this.start = value;
@@ -60,22 +60,30 @@ angular.module('gutenberg.services', [])
 			{
 				name: "straightforward",
 				fakeWords: 0,
-				actualWords: 0
+				actualWords: 0,
+				text: "",
+				max: 0
 			},
 			{
 				name: "first-order",
 				fakeWords: 0,
-				actualWords: 0
+				actualWords: 0,
+				max: 0,
+				text: ""
 			},
 			{
 				name: "second-order",
 				fakeWords: 0,
-				actualWords: 0
+				actualWords: 0,
+				max: 0,
+				text: ""
 			},
 			{
 				name: "third-order",
 				fakeWords: 0,
-				actualWords: 0
+				actualWords: 0,
+				max: 0,
+				text: ""
 			}
 		];
 
@@ -95,27 +103,54 @@ angular.module('gutenberg.services', [])
 			};
 		}
 
+		Monkeys.addCharacter = function(character, name) {
+			for (var i = Monkeys.monkeys.length - 1; i >= 0; i--) {
+				if (Monkeys.monkeys[i].name === name){
+					Monkeys.monkeys[i].text += character;
+				}
+			};
+		}
+
+		Monkeys.setMax = function(wordLength, name) {
+			for (var i = Monkeys.monkeys.length - 1; i >= 0; i--) {
+				if (Monkeys.monkeys[i].name === name){
+					if(Monkeys.monkeys[i].max < wordLength) {
+						Monkeys.monkeys[i].max = wordLength;
+					}
+				}
+			};
+		}
+
 		return Monkeys;
 
 	})
 
-
+	/* AnalysisFactory
+			This factory contains the text analysis functions for a
+			first-/second- or third-order monkey. */
 	.factory("AnalysisFactory", ["Alphabet", function(Alphabet) {
 
 		var AnalysisFactory = {};
 
-		AnalysisFactory.analyzeText = function(text, order) {
-			if (order === 1) {
+		AnalysisFactory.analyzeText = function(text, order, defferedObj) {
+			
+			/* ========================
+					First-order monkey
+				 ======================== */
 
-				if(AnalysisFactory.firstOrderMatrix === undefined) {
-					AnalysisFactory.firstOrderMatrix = new Array(2);
-					AnalysisFactory.firstOrderMatrix[0] = new Array(Alphabet.length);
-					AnalysisFactory.firstOrderMatrix[1] = new Array(Alphabet.length);
-					for (var i = AnalysisFactory.firstOrderMatrix[0] - 1; i >= 0; i--) {
-						AnalysisFactory.firstOrderMatrix[0] = undefined;
-						AnalysisFactory.firstOrderMatrix[1] = undefined;
-					};
-				}
+			var c = undefined;
+			var index = undefined;
+			var insertAt = undefined;
+
+			if (order === 1) { 
+
+				AnalysisFactory.firstOrderMatrix = new Array(2);
+				AnalysisFactory.firstOrderMatrix[0] = new Array(Alphabet.length);
+				AnalysisFactory.firstOrderMatrix[1] = new Array(Alphabet.length);
+				for (var i = AnalysisFactory.firstOrderMatrix[0].length - 1; i >= 0; i--) {
+					AnalysisFactory.firstOrderMatrix[0][i] = undefined;
+					AnalysisFactory.firstOrderMatrix[1][i] = undefined;
+				};			
 
 				for (var i = text.length - 1; i >= 0; i--) {
 					if(Alphabet.indexOf(text[i]) != -1) { // check if characters are in our alphabet
@@ -135,17 +170,21 @@ angular.module('gutenberg.services', [])
 				AnalysisFactory.firstOrderMatrix[0] = AnalysisFactory.firstOrderMatrix[0].slice(0, insertAt + 1);
 				AnalysisFactory.firstOrderMatrix[1] = AnalysisFactory.firstOrderMatrix[1].slice(0, insertAt + 1);
 
-			} else if (order === 2) {
+			} 
 
-				if(AnalysisFactory.secondOrderMatrix === undefined) {
-					AnalysisFactory.secondOrderMatrix = new Array(2);
-					AnalysisFactory.secondOrderMatrix[0] = new Array(Math.pow(Alphabet.length,2));
-					AnalysisFactory.secondOrderMatrix[1] = new Array(Math.pow(Alphabet.length,2));
-					for (var i = AnalysisFactory.secondOrderMatrix[0] - 1; i >= 0; i--) {
-						AnalysisFactory.secondOrderMatrix[0][i] = undefined;
-						AnalysisFactory.secondOrderMatrix[1][i] = undefined;
-					};
-				}
+			/* ========================
+					Second-order monkey
+				 ======================== */
+
+			else if (order === 2) {
+
+				AnalysisFactory.secondOrderMatrix = new Array(2);
+				AnalysisFactory.secondOrderMatrix[0] = new Array(Math.pow(Alphabet.length,2));
+				AnalysisFactory.secondOrderMatrix[1] = new Array(Math.pow(Alphabet.length,2));
+				for (var i = AnalysisFactory.secondOrderMatrix[0].length - 1; i >= 0; i--) {
+					AnalysisFactory.secondOrderMatrix[0][i] = undefined;
+					AnalysisFactory.secondOrderMatrix[1][i] = undefined;
+				};
 
 				for (var i = text.length - 1; i >= 0; i--) {
 					if(Alphabet.indexOf(text[i]) != -1 && Alphabet.indexOf(text[i-1]) != -1) { // check if characters are in our alphabet
@@ -165,17 +204,21 @@ angular.module('gutenberg.services', [])
 				AnalysisFactory.secondOrderMatrix[0] = AnalysisFactory.secondOrderMatrix[0].slice(0, insertAt + 1);
 				AnalysisFactory.secondOrderMatrix[1] = AnalysisFactory.secondOrderMatrix[1].slice(0, insertAt + 1);
 
-			} else if (order === 3) {
+			} 
 
-				if(AnalysisFactory.thirdOrderMatrix === undefined) {
-					AnalysisFactory.thirdOrderMatrix = new Array(2);
-					AnalysisFactory.thirdOrderMatrix[0] = new Array(Math.pow(Alphabet.length,3));
-					AnalysisFactory.thirdOrderMatrix[1] = new Array(Math.pow(Alphabet.length,3));
-					for (var i = AnalysisFactory.thirdOrderMatrix[0] - 1; i >= 0; i--) {
-						AnalysisFactory.thirdOrderMatrix[0][i] = undefined;
-						AnalysisFactory.thirdOrderMatrix[1][i] = undefined;
-					};
-				}
+			/* ========================
+					Third-order monkey
+				 ======================== */
+
+			else if (order === 3) {
+
+				AnalysisFactory.thirdOrderMatrix = new Array(2);
+				AnalysisFactory.thirdOrderMatrix[0] = new Array(Math.pow(Alphabet.length,3));
+				AnalysisFactory.thirdOrderMatrix[1] = new Array(Math.pow(Alphabet.length,3));
+				for (var i = AnalysisFactory.thirdOrderMatrix[0].length - 1; i >= 0; i--) {
+					AnalysisFactory.thirdOrderMatrix[0][i] = undefined;
+					AnalysisFactory.thirdOrderMatrix[1][i] = undefined;
+				};
 
 				for (var i = text.length - 1; i >= 0; i--) {
 					if(Alphabet.indexOf(text[i]) != -1 && Alphabet.indexOf(text[i-1]) != -1 && Alphabet.indexOf(text[i-2]) != -1) { // check if characters are in our alphabet
@@ -195,12 +238,63 @@ angular.module('gutenberg.services', [])
 				AnalysisFactory.thirdOrderMatrix[0] = AnalysisFactory.thirdOrderMatrix[0].slice(0, insertAt + 1);
 				AnalysisFactory.thirdOrderMatrix[1] = AnalysisFactory.thirdOrderMatrix[1].slice(0, insertAt + 1);
 			}
+
+			defferedObj.resolve();
 			
 		};
 
 		return AnalysisFactory;
 
-	}]);
+	}])
+
+
+	/* GutenbergText factory
+			1. Use this factory to get the URL of the txt file of	a specific book on the Gutenberg Project
+			2. Use this factory to get the actual text given an URL to a txt file of a specific book */
+	.factory("GutenbergTextFactory", ["$http",function($http) {
+
+		var GutenbergTextFactory = {};
+		GutenbergTextFactory.text = "";
+
+		var books = [
+			{ title: "A Connecticut Yankee in King Arthur's Court", author: "Mark Twain", file: "a_connecticut_yankee_in_king_arthur_s_court1.txt" },
+			{ title: "Adventures of Huckleberry Finn", author: "Mark Twain", file: "adventures_of_huckleberry_finn1.txt" },
+			{ title: "Agnes Grey", author: "Anne Bronte", file: "agnes_grey1.txt" },
+			{ title: "Alice's Adventures in Wonderland", author: "Lewis Carroll", file: "alices_adventures_in_wonderland.txt" },
+			{ title: "A Christmas Carol", author: "Charles Dickens", file: "christmas_carol.txt" },
+			{ title: "Memoirs Of Fanny Hill", author: "John Cleland", file: "fanny_hill.txt" },
+			{ title: "Jane Eyre", author: "Charlotte Bronte", file: "jane_eyre1.txt" }
+		]
+
+		GutenbergTextFactory.getTxt = function(url) {
+			$http.get("res/texts/" + url)
+				.success(function(data, status, header, config) {
+					GutenbergTextFactory.text = data;
+				});
+		};
+
+		/* function getTxtURL
+				This function retrieves the URL to a txt file of a specific book on the Gutenberg Project.
+				It assumes that the parameter *query* contains authors or titles. */
+		GutenbergTextFactory.getTxtURL = function(query) {
+			
+			var result = [];
+			var book = {};
+			
+			for (var i = books.length - 1; i >= 0; i--) {
+				book = books[i];
+				if (book.title.toLowerCase().indexOf(query.toLowerCase()) != -1 || book.author.toLowerCase().indexOf(query.toLowerCase()) != -1) { // find query in title or author
+					result.push(book);
+				}
+			}
+
+			return result;
+
+		};
+
+		return GutenbergTextFactory;
+
+	}])
 
 	/* myFunctions Factory
 			This factory contains custom functions, which 
@@ -211,17 +305,36 @@ angular.module('gutenberg.services', [])
 
 		var myFunctions = {};
 
+		var lastMonkey = "";
+
 		var word = "";
 
 		/* checkForWord function
 				checks if the new character yielded another word
 				and further checks if the word is actually an
-				english word */
+				english word
+				
+				***DON'T USE FOR PARALLEL MONKEYS*** 
+			
+			*/
 		myFunctions.checkForWord = function(character, monkey) {
-			if((character === " " || character === "!" || character === "?" || character === "," || character === "." || character === "\"" || character === "\'") && word !== ""){ 
+			
+			if(monkey !== lastMonkey) { // reset word with new monkey
+				lastMonkey = monkey;
+				word = "";
+			}
+
+			Monkeys.addCharacter(character, monkey);
+			if((character === " ") && word !== ""){ 
 				// we finished another word
+				var previousChar = word.charAt(-1);
+				if(previousChar === "!" || previousChar === "?" || previousChar === "," || previousChar === "." || previousChar === "\"" || previousChar === "\'"){
+					// remove punctuation in case there's
+					word = word.slice(0,word.length - 1);
+				}
 				if(WordFactory.words.indexOf(word) !== -1) {
 					Monkeys.addActualWord(monkey);
+					Monkeys.setMax(word.length, monkey);
 				} else {
 					Monkeys.addFakeWord(monkey);
 				}

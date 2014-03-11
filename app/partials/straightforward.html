@@ -31,7 +31,7 @@
 			</tr>
 			<tr ng-repeat="monkey in monkeys">
 				<td>{{ monkey.name }}</td>
-				<td>{{ monkey.actualWords }}</td>
+				<td>{{ monkey.actualWords + " (max. length: " + monkey.max + ")"}}</td>
 				<td>{{ monkey.fakeWords }}</td>
 				<td>{{ ((monkey.actualWords) / (monkey.actualWords + monkey.fakeWords)) * 100 | number:2 }} %</td>
 			</tr>
