@@ -33,10 +33,23 @@ describe("corrMatrixCtrl test", function() {
 		ctrl = $controller("CorrMatrixCtrl", {AnalysisFactory: fakeFactory, $scope: scope});
     }));
 
+	it('should return [{name: abc, prob: 1}] when get("abc") is called', function() {
+		var characters = scope.get("abc");
+		expect(characters.length).toBe(1);
+		expect(characters[0].name).toBe("abc");
+		expect(characters[0].prob).toBe(1);
+	})
+
+	it('should return [{name: abc, prob: 1}] when get("ab") is called', function() {
+		var characters = scope.get("ab");
+		expect(characters.length).toBe(1);
+		expect(characters[0].name).toBe("abc");
+		expect(characters[0].prob).toBe(1);	
+	})
+
 	it('should have prob 0 if get("ba") is called', function() {
 		var characters = scope.get("ba");
-		expect(characters.length).toBe(1);
-		expect(characters[0].prob).toBe(0);
+		expect(characters.length).toBe(0);
 	})
 
 	it("should have a get method", inject(function($controller, $rootScope) {

@@ -61,11 +61,15 @@ angular.module('gutenberg.directives', [])
 	.directive("corrMatrixFilter", [function() {
 		return {
 			link: function(scope, element, attr) {
-				element.bind("keydown", function(evt) {
-					scope.characters = scope.get(element.val().toLowerCase());
+				element.bind("keydown keyup", function(evt) {
+					scope.$apply(
+						scope.characters = scope.get(element.val().toLowerCase())
+					);
 				});
 				element.bind("focus", function(evt) {
-					scope.characters = scope.get(element.val().toLowerCase());
+					scope.$apply(
+						scope.characters = scope.get(element.val().toLowerCase())
+					);
 				});
 			}
 		}

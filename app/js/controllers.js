@@ -411,11 +411,15 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 				} 
 				for (var i = 0; i < tempFreqs.length; i++) {
 					if(tempNames[i].substring(0, query.length) === query) {
-						result.push({ name: tempNames[i].slice(-1), prob: (tempFreqs[i]/totalFreq + 0.0)});
+						if(tempFreqs[i]/totalFreq > 0) {
+							result.push({ name: tempNames[i], prob: (tempFreqs[i]/totalFreq + 0.0)});
+						}
 					}
 				};
 			}
+			
 			return result;
+			// $scope.characters = result;
 		};
 
 	}]);

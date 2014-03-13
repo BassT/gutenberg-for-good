@@ -53,11 +53,15 @@ describe("AnalysisFactory", function() {
 		expect(factory.firstOrderMatrix[1].length).toBe(40);
 	});
 
-	it("computeCorr should return an array of length 64000 if skipFlag is false and order 3", function() {
+	it("computeCorr should return an array of length 64000 with no undefined values if skipFlag is false and order 3", function() {
 		factory.computeCorr(text, 3, defferedObj, false);
 		expect(factory.thirdOrderMatrix.length).toBe(2);
 		expect(factory.thirdOrderMatrix[0].length).toBe(64000);
 		expect(factory.thirdOrderMatrix[1].length).toBe(64000);
+		for (var i = factory.thirdOrderMatrix[0].length - 1; i >= 0; i--) {
+			expect(factory.thirdOrderMatrix[0][i]).toBeDefined();
+			expect(factory.thirdOrderMatrix[1][i]).toBeDefined();
+		};
 	});
 
 	it("should return an array of length 1600 after computeCorr with skipFlag false and order 2 secondOrderMatrix", function() {
