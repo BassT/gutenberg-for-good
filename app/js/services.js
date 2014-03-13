@@ -328,7 +328,8 @@ angular.module('gutenberg.services', [])
 			{ title: "Alice's Adventures in Wonderland", author: "Lewis Carroll", file: "alices_adventures_in_wonderland.txt" },
 			{ title: "A Christmas Carol", author: "Charles Dickens", file: "christmas_carol.txt" },
 			{ title: "Memoirs Of Fanny Hill", author: "John Cleland", file: "fanny_hill.txt" },
-			{ title: "Jane Eyre", author: "Charlotte Bronte", file: "jane_eyre1.txt" }
+			{ title: "Jane Eyre", author: "Charlotte Bronte", file: "jane_eyre1.txt" },
+			{ title: "Short test text", author: "Test author", file: "test.txt"}
 		]
 
 		GutenbergTextFactory.getTxt = function(url) {

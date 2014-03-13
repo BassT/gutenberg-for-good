@@ -9,8 +9,9 @@ module.exports = function(config){
       'app/lib/ui-bootstrap-tpls-0.10.0.js',
       'test/lib/angular/angular-mocks.js',
       'app/js/**/*.js',
-      'app/js/controllers.js',
-      'test/unit/controllersSpec.js'
+      //'app/js/controllers.js',
+      //'test/unit/controllersSpec.js',
+      'test/unit/directivesSpec.js'
     ],
 
     exclude : [

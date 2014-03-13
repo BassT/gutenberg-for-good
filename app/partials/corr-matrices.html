@@ -19,30 +19,24 @@
 			<button type="button" class="btn" ng-click="loadText(scope.selectedBook.file)">{{ textLoadTextButton }}</button>
 			<button type="button" class="btn" compute-corr-on-click>{{ textComputeButton }}</button>
 		</p>
-
-		<div class="btn-group" ng-controller="TypingCtrl">
-			<button type="button" class="btn" ng-model="typing" ng-click="clicked(true)" btn-radio="'start'"><span class="glyphicon glyphicon-play"></span> Start typing</button>
-			<button type="button" class="btn" ng-model="typing" ng-click="clicked(false)" btn-radio="'stop'"><span class="glyphicon glyphicon-stop"></span> Stop typing</button>
-		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-sm-12">
-		<h2>Text typed by a first-order monkey</h2>
+		<h2>Explore the correlation matrix</h2>
 		<p class="corr-matrix" ng-controller="CorrMatrixCtrl">
 			<!-- how to include matrix?
 				typeahead input, which accepts 1-3 chars and outputs 
 				corresponding frequencies (probabilites) of (duos/trios of) chars
 			 -->
-			<input type="text" ng-model="q" corr-matrix-filter/><br/>
-			<p>
-			Given {{ q }}, the probabilities for the following characters are:<br/>
-				<ul>
-					<li ng-repeat="character in characters | filter: q">
-						{{ character.name }}: {{ character.prob }}
-					</li>
-				</ul>
-			</p>
+			<input type="text" ng-model="q" corr-matrix-filter/><br/><br/>
+			
+			Given "{{ q }}", the probabilities for the following characters are:<br/>
+			<ul>
+				<li ng-repeat="character in characters">
+					{{ character.name }}: {{ character.prob }}
+				</li>
+			</ul>
 
 			 <!-- add .csv export? - would be cool... -->
 		</p>

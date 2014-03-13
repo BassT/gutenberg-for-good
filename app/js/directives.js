@@ -62,10 +62,10 @@ angular.module('gutenberg.directives', [])
 		return {
 			link: function(scope, element, attr) {
 				element.bind("keydown", function(evt) {
-					scope.characters = scope.get(element.val());
+					scope.characters = scope.get(element.val().toLowerCase());
 				});
 				element.bind("focus", function(evt) {
-					scope.characters = scope.get(element.val());
+					scope.characters = scope.get(element.val().toLowerCase());
 				});
 			}
 		}

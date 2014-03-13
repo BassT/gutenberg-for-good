@@ -393,6 +393,8 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 
 		$scope.characters = [];
 
+		$scope.q = "";
+
 		$scope.get = function(query) {
 			var tempNames = AnalysisFactory.getNames(query.length + 1);
 			var tempFreqs = AnalysisFactory.getFreqs(query.length + 1);
@@ -403,13 +405,13 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 					if(tempNames[i].substring(0, query.length) === query) { // filter to characters, which start with query
 						totalFreq += tempFreqs[i];	
 					}
-					if(totalFreq === 0) {
-						totalFreq = 1; // all of the filtered characters have 0 frequency, so set totalFreq to 1 in order to avoid dividing by 0
-					} 
 				};
+				if(totalFreq === 0) {
+					totalFreq = 1; // all of the filtered characters have 0 frequency, so set totalFreq to 1 in order to avoid dividing by 0
+				} 
 				for (var i = 0; i < tempFreqs.length; i++) {
 					if(tempNames[i].substring(0, query.length) === query) {
-						result.push({ name: tempNames[i], prob: (tempFreqs[i]/totalFreq + 0.0)});
+						result.push({ name: tempNames[i].slice(-1), prob: (tempFreqs[i]/totalFreq + 0.0)});
 					}
 				};
 			}
