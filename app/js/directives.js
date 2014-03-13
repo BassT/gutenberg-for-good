@@ -4,6 +4,7 @@ angular.module('gutenberg.directives', [])
 			link: function(scope, element, attr) {
 				element.bind("keydown", function(evt) {
 					scope.requestTexts(element.val());
+					scope.textLoadTextButton = "Loaded " + element.val();
 				});
 			}
 		};
@@ -35,4 +36,37 @@ angular.module('gutenberg.directives', [])
 				});
 			}
 		};
+	}])
+	
+	.directive("computeCorrOnClick", ["$timeout", function($timeout) {
+		return {
+			link: function(scope, element, attr) {
+				element.bind("click", function(evt) {
+					scope.$apply(function() {
+						element.text("Computing corr. matrix...");
+					});
+					console.log("Computing corr. matrix...");
+					$timeout( function() {
+						scope.computeCorr(attr.order).then(function() {
+							scope.textComputeButton = "Done - compute again";
+							element.text(scope.textComputeButton);
+							console.log("Done");
+						});
+					}, 500);
+				});
+			}
+		};
+	}])
+
+	.directive("corrMatrixFilter", [function() {
+		return {
+			link: function(scope, element, attr) {
+				element.bind("keydown", function(evt) {
+					scope.characters = scope.get(element.val());
+				});
+				element.bind("focus", function(evt) {
+					scope.characters = scope.get(element.val());
+				});
+			}
+		}
 	}]);

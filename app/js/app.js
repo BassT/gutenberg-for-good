@@ -26,6 +26,9 @@ angular.module('gutenberg', [
 			.when("/third-order", {
 				templateUrl: "partials/third-order.html"
 			})
+			.when("/corr-matrices", {
+				templateUrl: "partials/corr-matrices.html"
+			})
 			.otherwise({
 				redirectTo: "/home"
 			});

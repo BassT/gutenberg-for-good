@@ -25,7 +25,7 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 			- Can we use this for every monkey?	*/
   .controller('TypingCtrl', ['$scope', 'Typing', function($scope, Typing) {
 
-  	$scope.typing = { stop: true, start: false };
+  	$scope.typing = "stop";
 
   	$scope.clicked = function(value) {
   		console.log("Emitted typingChangedEmit");
@@ -338,12 +338,18 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 
 	}])
 
-	/* Text analyzer control
-			- this controller basically just triggers the
-				text analysis of some factory */
+	/* 
+	=====================
+	Text analyzer control
+	=====================
+		- triggers the text analysis of some factory for monkeys 
+		- triggers computation of corr. matrices
+	*/
 	.controller("TextAnalyzerCtrl", ["$scope", "GutenbergTextFactory", "AnalysisFactory", "$q", function($scope, GutenbergTextFactory, AnalysisFactory, $q) {
 
 		$scope.selectedBook = {};
+		$scope.textComputeButton = "Compute correlation matrix";
+		$scope.textLoadTextButton = "Load text";
 
 		$scope.analyzeText = function(order) {
 
@@ -361,6 +367,44 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 
 		$scope.requestTexts = function(query) {
 			return GutenbergTextFactory.getTxtURL(query);
+		};
+
+		$scope.computeCorr = function() {
+			
+			var defferedObj = $q.defer();
+
+			AnalysisFactory.computeCorr(GutenbergTextFactory.text, 1, defferedObj, false);
+			AnalysisFactory.computeCorr(GutenbergTextFactory.text, 2, defferedObj, false);
+			AnalysisFactory.computeCorr(GutenbergTextFactory.text, 3, defferedObj, false);
+
+			return defferedObj.promise;
+			
+		};
+
+	}])
+
+	/* 
+	=====================
+	Correlation matrix control
+	=====================
+		- outputs the correlation matrix 
+	*/
+	.controller('CorrMatrixCtrl', ['AnalysisFactory', '$scope', function(AnalysisFactory, $scope){
+		
+		$scope.characters = [];
+
+		$scope.get = function(query) {
+			var tempNames = AnalysisFactory.getNames(query.length + 1);
+			var tempFreqs = AnalysisFactory.getFreqs(query.length + 1);
+			var totalFreq = 0;
+			var result = [];
+			for (var i = tempFreqs.length - 1; i >= 0; i--) {
+				totalFreq += tempFreqs[i];
+			};
+			for (var i = tempFreqs.length - 1; i >= 0; i--) {
+				result.push({ name: tempNames[i], freq: (tempFreqs[i]/totalFreq + 0.0)});
+			};
+			return result;
 		};
 
 	}]);

@@ -1,16 +1,33 @@
-'use strict';
+	describe("corrMatrixCtrl test", function() {
 
-/* jasmine specs for controllers go here */
+		var fakeFactory = {
+			getNames: function(order) {
+				if(order === 1) {
+					return ["a","b","c"];
+				} else if (order === 2) {
+					return ["aa", "ab", "ac", "bc"];
+				} else if (order === 3) {
+					return ["abc", "bac"];
+				}
+			},
+			getFreqs: function(order) {
+				if(order === 1) {
+					return [1,2,3];
+				} else if (order === 2) {
+					return [1,2,3,4];
+				} else if (order === 3) {
+					return [1,2];
+				}	
+			}
+		};
 
-describe('controllers', function(){
-  beforeEach(module('myApp.controllers'));
+		beforeEach(angular.module("gutenberg.controllers"));
 
+		it("should have a get method", inject(function($controller, $rootScope) {
+			
+			var controller = $controller("CorrMatrixCtrl", {AnalysisFactory: fakeFactory, $scope: $rootScope.$new()});
 
-  it('should ....', inject(function() {
-    //spec body
-  }));
+			expect(angular.isFunction(controller.get)).toBe(true);
+		}));
 
-  it('should ....', inject(function() {
-    //spec body
-  }));
-});
+	});

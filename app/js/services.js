@@ -132,8 +132,13 @@ angular.module('gutenberg.services', [])
 
 		var AnalysisFactory = {};
 
-		AnalysisFactory.analyzeText = function(text, order, defferedObj) {
-			
+		AnalysisFactory.computeCorr = function(text, order, defferedObj, skipFlag) {
+			// TODO
+			// copy from analyzeText and add flag to indicate if non-occurring
+			// chars are being skipped or included in the matrices
+
+			text = text.toLowerCase();
+
 			/* ========================
 					First-order monkey
 				 ======================== */
@@ -150,7 +155,14 @@ angular.module('gutenberg.services', [])
 				for (var i = AnalysisFactory.firstOrderMatrix[0].length - 1; i >= 0; i--) {
 					AnalysisFactory.firstOrderMatrix[0][i] = undefined;
 					AnalysisFactory.firstOrderMatrix[1][i] = undefined;
-				};			
+				};
+
+				if(!skipFlag) { // we're not skipping non-occuring chars
+					for (var i = Alphabet.length - 1; i >= 0; i--) { // first-order loop
+						AnalysisFactory.firstOrderMatrix[0][i] = Alphabet[i];
+						AnalysisFactory.firstOrderMatrix[1][i] = 0;
+					};					
+				}
 
 				for (var i = text.length - 1; i >= 0; i--) {
 					if(Alphabet.indexOf(text[i]) != -1) { // check if characters are in our alphabet
@@ -167,8 +179,10 @@ angular.module('gutenberg.services', [])
 				}
 
 				// remove unnecassary "undefined" columns
-				AnalysisFactory.firstOrderMatrix[0] = AnalysisFactory.firstOrderMatrix[0].slice(0, insertAt + 1);
-				AnalysisFactory.firstOrderMatrix[1] = AnalysisFactory.firstOrderMatrix[1].slice(0, insertAt + 1);
+				if(skipFlag){
+					AnalysisFactory.firstOrderMatrix[0] = AnalysisFactory.firstOrderMatrix[0].slice(0, insertAt + 1);
+					AnalysisFactory.firstOrderMatrix[1] = AnalysisFactory.firstOrderMatrix[1].slice(0, insertAt + 1);
+				}
 
 			} 
 
@@ -186,6 +200,15 @@ angular.module('gutenberg.services', [])
 					AnalysisFactory.secondOrderMatrix[1][i] = undefined;
 				};
 
+				if(!skipFlag) { // we're not skipping non-occuring chars
+					for (var i = Alphabet.length - 1; i >= 0; i--) { // first-order loop
+						for (var j = Alphabet.length - 1; j >= 0; j--) {
+							AnalysisFactory.secondOrderMatrix[0][i*Alphabet.length + j] = Alphabet[i] + Alphabet[j];
+							AnalysisFactory.secondOrderMatrix[1][i*Alphabet.length + j] = 0;
+						};
+					};					
+				}
+
 				for (var i = text.length - 1; i >= 0; i--) {
 					if(Alphabet.indexOf(text[i]) != -1 && Alphabet.indexOf(text[i-1]) != -1) { // check if characters are in our alphabet
 		        c = text[i-1] + text[i];
@@ -201,8 +224,10 @@ angular.module('gutenberg.services', [])
 				}
 
 				// remove unnecassary "undefined" columns
-				AnalysisFactory.secondOrderMatrix[0] = AnalysisFactory.secondOrderMatrix[0].slice(0, insertAt + 1);
-				AnalysisFactory.secondOrderMatrix[1] = AnalysisFactory.secondOrderMatrix[1].slice(0, insertAt + 1);
+				if(skipFlag) {
+					AnalysisFactory.secondOrderMatrix[0] = AnalysisFactory.secondOrderMatrix[0].slice(0, insertAt + 1);
+					AnalysisFactory.secondOrderMatrix[1] = AnalysisFactory.secondOrderMatrix[1].slice(0, insertAt + 1);
+				}
 
 			} 
 
@@ -220,6 +245,17 @@ angular.module('gutenberg.services', [])
 					AnalysisFactory.thirdOrderMatrix[1][i] = undefined;
 				};
 
+				if(!skipFlag) { // we're not skipping non-occuring chars
+					for (var i = Alphabet.length - 1; i >= 0; i--) { // first-order loop
+						for (var j = Alphabet.length - 1; j >= 0; j--) {
+							for (var k = Alphabet.length - 1; k >= 0; k--) {
+								AnalysisFactory.thirdOrderMatrix[0][i*Alphabet.length + j*Alphabet.length + k] = Alphabet[i] + Alphabet[j] + Alphabet[k];
+								AnalysisFactory.thirdOrderMatrix[1][i*Alphabet.length + j*Alphabet.length + k] = 0;
+							};
+						};
+					};					
+				}
+
 				for (var i = text.length - 1; i >= 0; i--) {
 					if(Alphabet.indexOf(text[i]) != -1 && Alphabet.indexOf(text[i-1]) != -1 && Alphabet.indexOf(text[i-2]) != -1) { // check if characters are in our alphabet
 		        c = text[i-2] + text[i-1] + text[i];
@@ -235,13 +271,42 @@ angular.module('gutenberg.services', [])
 				}
 
 				// remove unnecassary "undefined" columns
-				AnalysisFactory.thirdOrderMatrix[0] = AnalysisFactory.thirdOrderMatrix[0].slice(0, insertAt + 1);
-				AnalysisFactory.thirdOrderMatrix[1] = AnalysisFactory.thirdOrderMatrix[1].slice(0, insertAt + 1);
+				if(skipFlag) {
+					AnalysisFactory.thirdOrderMatrix[0] = AnalysisFactory.thirdOrderMatrix[0].slice(0, insertAt + 1);
+					AnalysisFactory.thirdOrderMatrix[1] = AnalysisFactory.thirdOrderMatrix[1].slice(0, insertAt + 1);
+				}
 			}
 
 			defferedObj.resolve();
+
+		}
+
+		AnalysisFactory.analyzeText = function(text, order, defferedObj) {
+			
+			// call computeCorr but skip non-occuring first-/second-/third-order chars
+			AnalysisFactory.computeCorr(text, order, defferedObj, true);
 			
 		};
+
+		AnalysisFactory.getFreqs = function(order) {
+			if(order === 1) {
+				return AnalysisFactory.firstOrderMatrix[1];
+			} else if (order === 2) {
+				return AnalysisFactory.secondOrderMatrix[1];
+			} else if (order === 3) {
+				return AnalysisFactory.thirdOrderMatrix[1];
+			}
+		}
+
+		AnalysisFactory.getNames = function(order) {
+			if(order === 1) {
+				return AnalysisFactory.firstOrderMatrix[0];
+			} else if (order === 2) {
+				return AnalysisFactory.secondOrderMatrix[0];
+			} else if (order === 3) {
+				return AnalysisFactory.thirdOrderMatrix[0];
+			}
+		}
 
 		return AnalysisFactory;
 
