@@ -5,8 +5,11 @@ module.exports = function(config){
     files : [
       'app/lib/angular/angular.js',
       'app/lib/angular/angular-*.js',
+      'app/lib/ui-bootstrap-0.10.0.js',
+      'app/lib/ui-bootstrap-tpls-0.10.0.js',
       'test/lib/angular/angular-mocks.js',
       'app/js/**/*.js',
+      'app/js/controllers.js',
       'test/unit/controllersSpec.js'
     ],
 
@@ -23,15 +26,9 @@ module.exports = function(config){
     browsers : ['Chrome'],
 
     plugins : [
-            'karma-junit-reporter',
             'karma-chrome-launcher',
             'karma-firefox-launcher',
             'karma-jasmine'
             ],
-
-    junitReporter : {
-      outputFile: 'test_out/unit.xml',
-      suite: 'unit'
-    }
 
 })}

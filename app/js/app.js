@@ -7,7 +7,9 @@ angular.module('gutenberg', [
   'gutenberg.services',
   'gutenberg.directives',
   'gutenberg.controllers',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  // 'ui-templates'
+  'ui.bootstrap.tpls'
 ])
 	.config( function($routeProvider) {
 		$routeProvider

@@ -390,7 +390,9 @@ angular.module('gutenberg.controllers', ['ui.bootstrap'])
 		- outputs the correlation matrix 
 	*/
 	.controller('CorrMatrixCtrl', ['AnalysisFactory', '$scope', function(AnalysisFactory, $scope){
-		
+
+
+
 		$scope.characters = [];
 
 		$scope.get = function(query) {
