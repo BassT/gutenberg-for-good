@@ -12,7 +12,7 @@ angular.module('gutenberg.services')
 	
 	AnalysisFactory.fetchCorrMatrix = function(fileURL, defferedObj, skipFlag) {
 		
-		var baseURI = "http://localhost:8080";
+		var baseURI = "http://http://agile-escarpment-3454.herokuapp.com";
 		var fileBaseURI = "https://wiki.eecs.yorku.ca/course_archive/2013-14/W/6339/_media/assignments:";
 		
 		var skip = ""; 		
