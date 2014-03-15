@@ -9,27 +9,27 @@ angular.module("gutenberg.controllers")
 
 	$scope.text = Monkeys.monkeys[0].text; //initialize emtpy text
 
-	var timer = {};
-	var character = "";
+	this.timer = undefined;
+	this.character = "";
 
 	$scope.$on("typingChangedBroadcast", function() { // receive event that someone clicked a typing control button
 		console.log("Received typingChangedBroadcast");
 		console.log(Typing);
 
 		if(Typing.start){ // monkey, work!
-			if(!angular.isDefined(timer)) {
+			if(!angular.isDefined(this.timer)) {
 				timer = $interval( function() {
 					var rand = Math.floor(Math.random() * Alphabet.length); // get index of next character randomly
-					character = Alphabet[rand];
-					$scope.text += character; // add actual next character to text
-					myFunctions.checkForWord(character, "straightforward");
+					this.character = Alphabet[rand];
+					$scope.text += this.character; // add actual next character to text
+					myFunctions.checkForWord(this.character, "straightforward");
 					$scope.$emit("TypedCharacterEmit");
 				}, Typing.speed);
 			}
 		} else { // monkey, stop!
-			if(angular.isDefined(timer)) {
-				$interval.cancel(timer);
-				timer = undefined;
+			if(angular.isDefined(this.timer)) {
+				$interval.cancel(this.timer);
+				this.timer = undefined;
 			}
 		}
 	});

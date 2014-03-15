@@ -13,6 +13,7 @@ angular.module("gutenberg.controllers")
 	});
 
 	$scope.$on("TypedCharacterEmit", function() {
+		console.log("Received TypedCharacterEmit and broadcasted TypedCharacterBroadcast");
 		$scope.$broadcast("TypedCharacterBroadcast");
 	});
 

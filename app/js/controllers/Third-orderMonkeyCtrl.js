@@ -10,7 +10,7 @@ angular.module("gutenberg.controllers")
 
 	$scope.text = Monkeys.monkeys[3].text; //initialize emtpy text
 
-	var timer = {};
+	this.timer = undefined;
 	var character = "";
 	var twoPreviousTypedChars = "";
 	var matrix = AnalysisFactory.thirdOrderMatrix;
@@ -20,7 +20,7 @@ angular.module("gutenberg.controllers")
 		console.log(Typing);
 
 		if(Typing.start){ // monkey, work!
-			if(!angular.isDefined(timer)) {
+			if(!angular.isDefined(this.timer)) {
 				timer = $interval( function() {
 					matrix = AnalysisFactory.thirdOrderMatrix;
 					/* ================================
@@ -78,9 +78,9 @@ angular.module("gutenberg.controllers")
 				}, Typing.speed);
 			}
 		} else { // monkey, stop!
-			if(angular.isDefined(timer)) {
-				$interval.cancel(timer);
-				timer = undefined;
+			if(angular.isDefined(this.timer)) {
+				$interval.cancel(this.timer);
+				this.timer = undefined;
 			}
 		}
 	});

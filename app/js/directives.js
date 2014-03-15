@@ -41,7 +41,7 @@ angular.module('gutenberg.directives', []).directive("gutenbergSearch",
 		link : function(scope, element, attr) {
 			element.bind("click", function(evt) {
 				scope.$apply(function() {
-					element.text("Computing corr. matrix...");
+					element.text("Backend is computing correlation matrices...");
 				});
 				console.log("Computing corr. matrix...");
 				$timeout(function() {
@@ -52,7 +52,7 @@ angular.module('gutenberg.directives', []).directive("gutenbergSearch",
 					}, function() {
 						// reject function
 					}, function(notification) {
-						scope.textComputeButton = "Computed " + notification + " correlation matrix, ...";
+						scope.textComputeButton = "Backend computed " + notification + " correlation matrix, ...";
 						element.text(scope.textComputeButton);
 					});
 				}, 500);

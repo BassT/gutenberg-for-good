@@ -10,6 +10,7 @@ module.exports = function(config) {
 				// 'test/unit/servicesSpec.js',
 				//'test/unit/**/*.js'
 				//'test/unit/service tests/AnalysisFactory.spec.js',
+				'test/unit/controller tests/First-OrderMonkeyCtrl.spec.js'
 				],
 
 		exclude : [ 'app/lib/angular/angular-loader.js',
