@@ -45,10 +45,15 @@ angular.module('gutenberg.directives', []).directive("gutenbergSearch",
 				});
 				console.log("Computing corr. matrix...");
 				$timeout(function() {
-					scope.computeCorr(attr.order).then(function() {
+					scope.computeCorr().then(function() {
 						scope.textComputeButton = "Done - compute again";
 						element.text(scope.textComputeButton);
 						console.log("Done");
+					}, function() {
+						// reject function
+					}, function(notification) {
+						scope.textComputeButton = "Computed " + notification + " correlation matrix, ...";
+						element.text(scope.textComputeButton);
 					});
 				}, 500);
 			});

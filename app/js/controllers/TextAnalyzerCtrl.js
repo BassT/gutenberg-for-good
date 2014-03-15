@@ -24,6 +24,7 @@ angular.module("gutenberg.controllers")
 
 	$scope.loadText = function(url) {
 		GutenbergTextFactory.getTxt(url);
+		$scope.selectedBook = { file: url };
 	};
 
 	$scope.requestTexts = function(query) {
@@ -33,11 +34,9 @@ angular.module("gutenberg.controllers")
 	$scope.computeCorr = function() {
 
 		var defferedObj = $q.defer();
-
-		AnalysisFactory.computeCorr(GutenbergTextFactory.text, 1, defferedObj, false);
-		AnalysisFactory.computeCorr(GutenbergTextFactory.text, 2, defferedObj, false);
-		AnalysisFactory.computeCorr(GutenbergTextFactory.text, 3, defferedObj, false);
-
+		
+		AnalysisFactory.fetchCorrMatrix($scope.selectedBook.file, defferedObj, false);
+		
 		return defferedObj.promise;
 
 	};
