@@ -12,7 +12,7 @@ angular.module('gutenberg.services')
 	
 	AnalysisFactory.fetchCorrMatrix = function(fileURL, defferedObj, skipFlag) {
 		
-		var baseURI = "http://http://agile-escarpment-3454.herokuapp.com";
+		var baseURI = "https://agile-escarpment-3454.herokuapp.com";
 		var fileBaseURI = "https://wiki.eecs.yorku.ca/course_archive/2013-14/W/6339/_media/assignments:";
 		
 		var skip = ""; 		
@@ -32,30 +32,27 @@ angular.module('gutenberg.services')
 					AnalysisFactory.firstOrderMatrix[0] = data.characters;
 					AnalysisFactory.firstOrderMatrix[1] = data.frequencies;
 					defferedObj.notify("first-order");
+					$http.jsonp(baseURI + "/so?callback=JSON_CALLBACK&" +
+							"txt=" + fileBaseURI + fileURL + "?skip=" + skip)
+							.success(function(data, status, headers, config) {
+								console.log("Received second-order data: " + data);
+								console.log("Status: " + status);
+								AnalysisFactory.secondOrderMatrix = new Array(2);
+								AnalysisFactory.secondOrderMatrix[0] = data.characters;
+								AnalysisFactory.secondOrderMatrix[1] = data.frequencies;
+								defferedObj.notify("second-order");
+								$http.jsonp(baseURI + "/to?callback=JSON_CALLBACK&" +
+										"txt=" + fileBaseURI + fileURL + "?skip=" + skip)
+										.success(function(data, status, headers, config) {
+											console.log("Received third-order data: " + data);
+											console.log("Status: " + status);
+											AnalysisFactory.thirdOrderMatrix = new Array(2);
+											AnalysisFactory.thirdOrderMatrix[0] = data.characters;
+											AnalysisFactory.thirdOrderMatrix[1] = data.frequencies;
+											defferedObj.resolve();
+										});
+							});
 				});
-
-		$http.jsonp(baseURI + "/so?callback=JSON_CALLBACK&" +
-				"txt=" + fileBaseURI + fileURL + "?skip=" + skip)
-				.success(function(data, status, headers, config) {
-					console.log("Received second-order data: " + data);
-					console.log("Status: " + status);
-					AnalysisFactory.secondOrderMatrix = new Array(2);
-					AnalysisFactory.secondOrderMatrix[0] = data.characters;
-					AnalysisFactory.secondOrderMatrix[1] = data.frequencies;
-					defferedObj.notify("second-order");
-				});
-
-		$http.jsonp(baseURI + "/to?callback=JSON_CALLBACK&" +
-				"txt=" + fileBaseURI + fileURL + "?skip=" + skip)
-				.success(function(data, status, headers, config) {
-					console.log("Received third-order data: " + data);
-					console.log("Status: " + status);
-					AnalysisFactory.thirdOrderMatrix = new Array(2);
-					AnalysisFactory.thirdOrderMatrix[0] = data.characters;
-					AnalysisFactory.thirdOrderMatrix[1] = data.frequencies;
-					defferedObj.resolve();
-				});
-
 	};
 
 	AnalysisFactory.computeCorr = function(text, order, defferedObj, skipFlag) {

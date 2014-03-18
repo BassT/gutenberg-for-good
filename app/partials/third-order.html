@@ -3,7 +3,7 @@
 	<div class="col-sm-6">
 		<h2>Description</h2>
 		<p>
-			This is a third-order monkey. You can feed the monkey a text and she or he will type characters according to their occurence in the text you gave her or him. This monkey though will also take the previous typed character into account!
+			This is a third-order monkey. You can feed the monkey a text and she or he will type characters according to their occurence in the text you gave her or him. This monkey though will also take the two previous typed characters into account!
 		</p>
 		<ol>
 			<li>First search and select a text from Project Gutenberg</li>
@@ -11,7 +11,7 @@
 			<li>Let the monkey text</li>
 		</ol>
 		<p>
-			During the text analysis the monkey records for every <i>duo</i> of characters its frequency and stores it in a two-dimensional array. When asked to type, he slices the array to those <i>duos</i>, which start with the previously typed character. Using this slice he computes the sum of the frequencies of all elements in the array, denoted by <i>totalFreq</i>, and generates a random number within the interval [0:<i>totalFreq</i>]. Then he successively adds the frequencies of the elements of the slice up until this sum exceeds <i>totalFreq</i> and types the characters, whose frequency he added last.
+			During the text analysis the monkey records for every <i>trio</i> of characters its frequency and stores it in a two-dimensional array. When asked to type, he slices the array to those <i>trios</i>, which start with the two previously typed characters. Using this slice he computes the sum of the frequencies of all elements in the array, denoted by <i>totalFreq</i>, and generates a random number within the interval [0:<i>totalFreq</i>]. Then he successively adds the frequencies of the elements of the slice up until this sum exceeds <i>totalFreq</i> and types the characters, whose frequency he added last.
 		</p>
 	</div>
 	<div class="col-sm-6">
